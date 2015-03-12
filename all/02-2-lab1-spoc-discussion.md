@@ -39,8 +39,8 @@ cons_putc(int c) {
 ---
 
 lab1中printfmt函数用到了可变参，请参考写一个小的linux应用程序，完成实现定义和调用一个可变参数的函数。(spoc)
--
-double sum_series(int num, ...) 
+
+ double sum_series(int num, ...) 
 {   
 	double sum= 0.0, t;   
 	va_list argptr;   
