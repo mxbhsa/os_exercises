@@ -36,6 +36,7 @@ NOTICE
 （2）(spoc) 有一台假想的计算机，页大小（page size）为32 Bytes，支持32KB的虚拟地址空间（virtual address space）,有4KB的物理内存空间（physical memory），采用二级页表，一个页目录项（page directory entry ，PDE）大小为1 Byte,一个页表项（page-table entries
 PTEs）大小为1 Byte，1个页目录表大小为32 Bytes，1个页表大小为32 Bytes。页目录基址寄存器（page directory base register，PDBR）保存了页目录表的物理地址（按页对齐）。
 
+```
 Virtual Address 6c74 11011 00011 10100 
   --> pde index : 0x1b pde contents:(valid 1,pfn 0x20)
     --> pte index : 0x03 pte contents :(valid 1 pfn 0x61)
@@ -63,10 +64,11 @@ Virtual Address 390e
   -->Fault (page directory entry not valid)
 Virtual Address 748b
   -->Fault (page table entry not valid)
-
+```
 
 
 （3）请基于你对原理课二级页表的理解，并参考Lab2建页表的过程，设计一个应用程序（可基于python, ruby, C, C++，LISP等）可模拟实现(2)题中描述的抽象OS，可正确完成二级页表转换。
+```
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -138,11 +140,12 @@ int main(int argc, const char * argv[]) {
     scanf("%x", &addr);
     get_page(addr);
 }
-
+```
 
 （4）假设你有一台支持[反置页表](http://en.wikipedia.org/wiki/Page_table#Inverted_page_table)的机器，请问你如何设计操作系统支持这种类型计算机？请给出设计方案。
+```
     设计一个支持多级页表的系统，在通过页表读取数据时，先通过多级页表找到是否存在与内存中，若不在，则通过IO系统从外设读取至内存中。
-
+```
 (5)[X86的页面结构](http://os.cs.tsinghua.edu.cn/oscourse/OS2015/lecture06#head-1f58ea81c046bd27b196ea2c366d0a2063b304ab)
 --- 
 
