@@ -1,71 +1,15 @@
-#lec8 虚拟内存spoc练习
+#LAB2实验报告
+####马晓彬
 
 
-NOTICE
-- 有"w4l2"标记的题是助教要提交到学堂在线上的。
-- 有"w4l2"和"spoc"标记的题是要求拿清华学分的同学要在实体课上完成，并按时提交到学生对应的git repo上。
-- 有"hard"标记的题有一定难度，鼓励实现。
-- 有"easy"标记的题很容易实现，鼓励实现。
-- 有"midd"标记的题是一般水平，鼓励实现。
+## 练习1
 
+### 设计实现过程
 
-## 个人思考题
+* default_init函数沿用原有的代码未作修改
+* default_init_memmap函数未作修改，原有的代码将所有页的管理块都初始化并分为了一整块添加到了free_list链表的后边
+* Default_alloc_pages函数仅是将``` list_add(&free_list, &(p->page_link));```这个代码段
 
-### 内存访问局部性的应用程序例子
----
-(1)(w4l2)下面是一个体现内存访问局部性好的简单应用程序例子，请参考，在linux中写一个简单应用程序，体现内存局部性差，并给出其执行时间。
-
-```
-#include <stdio.h>
-#define NUM 1024
-#define COUNT 10
-int A[NUM][NUM];
-void main (void) {
-int i,j,k;
-for (k = 0; k<COUNT; k++)
-for (i = 0; i < NUM; i++)
-for (j = 0; j	 < NUM; j++)
-A[i][j] = i+j;
-printf("%d count computing over!\n",i*j*k);
-}
-```
-输出为：
-```
-10485760 count computing over!
-time: 44257
-```
-
-局部性不好的程序为：
-
-```
-#include <cstdio>
-#include <ctime>
-#define NUM 1024
-#define COUNT 10
-int A[NUM][NUM];
-using namespace std;
-int main()
-{
-    time_t t1 = clock();
-    int i,j,k;
-    for (k = 0; k<COUNT; k++)
-    for (i = 0; i < NUM; i++)
-    for (j = 0; j  < NUM; j++)
-        A[j][i] = i+j;
-    time_t t2 = clock();
-    printf("%d count computing over!\ntime: %d ms\n",i*j*k,t2-t1);
-}
-```
-输出：
-```
-10485760 count computing over!
-time: 240290
-```
-
-可以发现局部性不好的程序效率是前者的将近六倍。
-
-## 小组思考题目
-----
 
 ### 缺页异常嵌套
 
@@ -77,7 +21,6 @@ time: 240290
 ### 缺页中断次数计算
 （2）如果80386机器的一条机器指令(指字长4个字节)，其功能是把一个32位字的数据装入寄存器，指令本身包含了要装入的字所在的32位地址。这个过程最多会引起几次缺页中断？
 > 提示：内存中的指令和数据的地址需要考虑地址对齐和不对齐两种情况。需要考虑页目录表项invalid、页表项invalid、TLB缺失等是否会产生中断？
-> 
 ```
 指令缺页中断两次，装入字缺页中断两次。
 ```
@@ -166,14 +109,18 @@ disk 16: 00 0a 15 1a 03 00 09 13 1c 0a 18 03 13 07 17 1c
 ```
 
 附源程序：
-
 ```
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
+
 using namespace std;
+
+
 uint8_t memo[4096];//4KB内存
 uint8_t disk[4096]; //32KB硬盘
+
 void load(uint8_t* target, char* name)
 {
     ifstream fin(name);
@@ -189,7 +136,9 @@ void load(uint8_t* target, char* name)
         target[c] = num;
         c++;
     }
+
 }
+
 uint8_t get_page(uint32_t x)
 {
     int offset = x %32;
@@ -199,8 +148,10 @@ uint8_t get_page(uint32_t x)
     int pde = x %32;
     int pdbr = 0xd80;
     int pde_ptr = pdbr + pde;
+    
     //printf("%x\n",memo[pde_ptr]);
     int page_dir_found = memo[pde_ptr] >> 7;
+    
     printf("pde index:0x%08x\tpde contents:0x%08x\tvalid: %d\tpfn: 0x%08x\n",pde,memo[pde_ptr],page_dir_found,memo[pde_ptr] % (1<<7));
     if(page_dir_found == 0)
     {
@@ -233,6 +184,8 @@ uint8_t get_page(uint32_t x)
         }
     }
 }
+
+
 int main(int argc, const char * argv[]) {
     load(memo, "1.txt");
     load(disk, "2.txt");
