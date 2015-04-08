@@ -232,7 +232,9 @@ class scheduler:
         for i in range(1,num_process) :
           if self.proc_info[(i+pid)%num_process][PROC_STATE] == STATE_READY :
             self.curr_proc = (i+pid)%num_process
+            break
             
+        #print '11',self.curr_proc
         if self.proc_info[self.curr_proc][PROC_STATE] != STATE_DONE and  self.proc_info[self.curr_proc][PROC_STATE] != STATE_WAIT:
             self.proc_info[self.curr_proc][PROC_STATE] = STATE_RUNNING
         return
@@ -316,9 +318,11 @@ class scheduler:
             for pid in range(len(self.proc_info)):
                 if clock_tick in self.io_finish_times[pid]:
                     # if IO finished, the should do something for related process
-                    #YOUR CODE
+                    #YOUR 
                     self.move_to_ready(STATE_WAIT,pid)
-                    self.next_proc()
+                    if self.get_num_runnable()-1 == 0 :
+                        self.next_proc()
+                        self.check_if_done()
                     io_done = True
             
             # if current proc is RUNNING and has an instruction, execute it
@@ -370,7 +374,8 @@ class scheduler:
 
             # ENDCASE: check if currently running thing is out of instructions
             self.check_if_done()
-            raw_input()
+            #raw_input()
+            #print io_length
         return (cpu_busy, io_busy, clock_tick)
         
 #
