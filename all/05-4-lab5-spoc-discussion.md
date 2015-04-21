@@ -51,7 +51,11 @@ https://github.com/chyyuu/ucore_lab/blob/master/related_info/lab1/lab1-boot-with
 > 需写练习报告和简单编码，完成后放到git server 对应的git repo中
 
 ### 练习用的[lab5 spoc exercise project source code](https://github.com/chyyuu/ucore_lab/tree/master/related_info/lab5/lab5-spoc-discuss)
-
+完成了用户进程的五个周期的打印
+上下文切换时的输出
+创建进程分配资源时的输出
+进行用户态到内核态的cs寄存器输出（proc.c中的forkrets）
+[代码](https://github.com/mxbhsa/ucore_lab/tree/master/related_info/lab5/lab5-spoc-discuss)
 #### 掌握知识点
 1. 用户进程的启动、运行、就绪、等待、退出
 2. 用户进程的管理与简单调度
