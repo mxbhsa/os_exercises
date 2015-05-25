@@ -1,5 +1,6 @@
-26题 
+26题 读写者问题
 semaphore方法：
+```
 #coding=utf-8
 import threading  
 import random  
@@ -103,3 +104,4 @@ if __name__ == "__main__":
     print len(threads)
     for thread in threads: 
       thread.start() 
+```
